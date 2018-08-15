@@ -11,12 +11,13 @@
 
 #include "dummy/project.h"
 
-Dummy::Project::Project(const QString& folderPath) :
+Dummy::Project::Project(const std::wstring& folderPath) :
     m_fullpath(folderPath), m_mapsModel(nullptr)
 {
 
     // Try to read the "project.xml" file that should be present in folderPath.
-    QFile xmlProjectFile(folderPath + "/project.xml");
+    QFile xmlProjectFile(
+        QString::fromStdWString(folderPath + L"/project.xml"));
     m_domDocument.setContent(&xmlProjectFile);
     xmlProjectFile.close();
 
@@ -86,10 +87,9 @@ void Dummy::Project::saveProjectFile() {
     projectNode.appendChild(mapsNode);
 
     _dumpToXmlNode(doc, mapsNode, m_mapsModel->invisibleRootItem());
-    QString xmlPath(m_fullpath + "/project.xml");
 
     // XXX: Handle errors eventually.
-    QFile file(xmlPath);
+    QFile file(QString::fromStdWString(m_fullpath + L"/project.xml"));
     file.open(QIODevice::WriteOnly|QIODevice::Text);
     QTextStream stream(&file);
     doc.save(stream, 4);
@@ -111,21 +111,24 @@ void Dummy::Project::_dumpToXmlNode(QDomDocument& doc,
     }
 }
 
-void Dummy::Project::cleanMapName(QString& mapName) {
-    mapName.replace("/", "");
-    mapName.replace("..", "");
+void Dummy::Project::cleanMapName(std::wstring& mapName)
+{
+    /*
+    std::replace(mapName.begin(), mapName.end(), L"/", L"_");
+    std::replace(mapName.begin(), mapName.end(), L"..", L"__");
+    */
 }
 
 std::shared_ptr<Misc::MapDocument>&
-Dummy::Project::document(const QString& mapName) {
-    QString cleantMapname(mapName);
+Dummy::Project::document(const std::wstring& mapName) {
+    std::wstring cleantMapname(mapName);
     cleanMapName(cleantMapname);
 
     if (!m_openedMaps.contains(cleantMapname)) {
 
         std::shared_ptr<Map> map(Dummy::Map::loadFromFile(
             *this,
-            m_fullpath + "/maps/" + cleantMapname + ".map"));
+            m_fullpath + L"/maps/" + cleantMapname + L".map"));
         map->setName(cleantMapname);
 
         std::shared_ptr<Misc::MapDocument> mapDocument(

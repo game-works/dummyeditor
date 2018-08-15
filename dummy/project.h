@@ -2,6 +2,7 @@
 #define PROJECT_H
 
 #include <memory>
+#include <string>
 
 #include <QDomDocument>
 #include <QMap>
@@ -14,14 +15,14 @@ namespace Dummy {
     class Project
     {
     public:
-        Project(const QString& projectFolder);
+        Project(const std::wstring& projectFolder);
         virtual ~Project();
         static void create(const QString&);
         Misc::MapTreeModel* mapsModel();
 
-        static void cleanMapName(QString& mapName);
+        static void cleanMapName(std::wstring& mapName);
 
-        inline const QString& fullpath() const {
+        inline const std::wstring& fullpath() const {
             return m_fullpath;
         }
 
@@ -36,21 +37,22 @@ namespace Dummy {
 
         void saveProjectFile();
 
-        std::shared_ptr<Misc::MapDocument>& document(const QString& mapName);
+        std::shared_ptr<Misc::MapDocument>& document(
+            const std::wstring& mapName);
 
-        inline QMap<QString, std::shared_ptr<Misc::MapDocument>>
+        inline QMap<std::wstring, std::shared_ptr<Misc::MapDocument>>
         openedMaps() const
         {
             return m_openedMaps;
         }
 
     private:
-        QString m_fullpath;
+        std::wstring m_fullpath;
         QDomDocument m_domDocument;
         Misc::MapTreeModel* m_mapsModel;
         bool m_isModified;
 
-        QMap<QString, std::shared_ptr<Misc::MapDocument>> m_openedMaps;
+        QMap<std::wstring, std::shared_ptr<Misc::MapDocument>> m_openedMaps;
 
         static QDomDocument _createXmlProjecTree();
         static void _createXmlProjectFile(const QString&);

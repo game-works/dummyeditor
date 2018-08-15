@@ -5,6 +5,8 @@
 #include <QKeyEvent>
 #include <QMessageBox>
 
+#include <string>
+
 #include "dummy/map.h"
 #include "dummy/project.h"
 
@@ -202,7 +204,7 @@ void MainWindow::_loadProject(const QString& projectDirectory) {
     _initializeScenes();
 
     m_currentProject = std::shared_ptr<Dummy::Project>(
-        new Dummy::Project(projectDirectory)
+        new Dummy::Project(projectDirectory.toStdWString())
     );
 
     ui->treeViewMaps->setModel(
@@ -223,7 +225,7 @@ void MainWindow::saveProject() {
             QMap<QString, Misc::MapDocument>::iterator i;
 
             for(auto e : m_currentProject->openedMaps().keys()) {
-                qDebug() << e;
+                qDebug() << QString::fromStdWString(e);
                 m_currentProject->document(e)->save();
             }
         }
@@ -238,12 +240,13 @@ void MainWindow::_initializeProject(const QString& projectDirectory) {
 void MainWindow::selectCurrentMap(QModelIndex selectedIndex) {
     Misc::MapTreeModel* mapModel = m_currentProject->mapsModel();
 
-    QString mapName(mapModel->itemFromIndex(selectedIndex)->text());
-    qDebug() << mapName;
+    std::wstring mapName(
+        mapModel->itemFromIndex(selectedIndex)->text().toStdWString());
+    qDebug() << QString::fromStdWString(mapName);
     std::shared_ptr<Dummy::Map> map(
         m_currentProject->document(mapName)->map());
     m_chipsetScene->setChipset(
-        m_currentProject->fullpath() + "/chipsets/" + map->chipset()
+        m_currentProject->fullpath() + L"/chipsets/" + map->chipset()
     );
     m_mapScene->setMapDocument(m_currentProject->document(mapName));
 

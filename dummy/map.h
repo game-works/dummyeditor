@@ -3,6 +3,9 @@
 #include <QVector>
 #include <QString>
 #include <QtGlobal>
+
+#include <cstdint>
+#include <string>
 #include <memory>
 
 #include "dummy/layer.h"
@@ -17,7 +20,10 @@ namespace Dummy {
     class Map
     {
     public:
-        Map(const Project& project, quint16 width = 1, quint16 height = 1);
+        Map(const Project& project,
+            std::uint16_t width = 1,
+            std::uint16_t height = 1);
+
         virtual ~Map();
 
         inline const Project& project() const {
@@ -28,27 +34,27 @@ namespace Dummy {
             return m_version;
         }
 
-        const QString& name() const {
+        const std::wstring& name() const {
             return m_name;
         }
 
-        quint16 width() const {
+        std::uint16_t width() const {
             return m_width;
         }
 
-        quint16 height() const {
+        std::uint16_t height() const {
             return m_height;
         }
 
-        const QString& chipset() const {
+        const std::wstring& chipset() const {
             return m_chipset;
         }
 
-        const QString& music() const {
+        const std::wstring& music() const {
             return m_music;
         }
 
-        const QString& backgroundPicture() const {
+        const std::wstring& backgroundPicture() const {
             return m_backgroundPicture;
         }
 
@@ -57,32 +63,32 @@ namespace Dummy {
             return *this;
         }
 
-        Map& setName(const QString& name) {
+        Map& setName(const std::wstring& name) {
             m_name = name;
             return *this;
         }
 
-        Map& setWidth(quint16 width) {
+        Map& setWidth(std::uint16_t width) {
             m_width = width;
             return *this;
         }
 
-        Map& setHeight(quint16 height) {
+        Map& setHeight(std::uint16_t height) {
             m_height = height;
             return *this;
         }
 
-        Map& setChipset(const QString& chipset) {
+        Map& setChipset(const std::wstring& chipset) {
             m_chipset = chipset;
             return *this;
         }
 
-        Map& setMusic(const QString& music) {
+        Map& setMusic(const std::wstring& music) {
             m_music = music;
             return *this;
         }
 
-        Map& setBackgroundPicture(const QString& backgroundPicture) {
+        Map& setBackgroundPicture(const std::wstring& backgroundPicture) {
             m_backgroundPicture = backgroundPicture;
             return *this;
         }
@@ -100,10 +106,10 @@ namespace Dummy {
         }
 
         static std::shared_ptr<Map> loadFromFile(const Project&,
-                                                 const QString& filename);
+                                                 const std::wstring& filename);
         static std::shared_ptr<Map> loadFromFile(const Project&, QFile& file);
 
-        void saveToFile(const QString& filename) const;
+        void saveToFile(const std::wstring& filename) const;
         void saveToFile(QFile& file) const;
 
         friend QDataStream& operator<<(QDataStream& stream,
@@ -125,11 +131,11 @@ namespace Dummy {
 
         const Project& m_project;
         unsigned short m_version;
-        QString m_name;
-        quint16 m_width, m_height; // Map dimension
-        QString m_chipset;
-        QString m_music;
-        QString m_backgroundPicture;
+        std::wstring m_name;
+        std::uint16_t m_width, m_height; // Map dimension
+        std::wstring m_chipset;
+        std::wstring m_music;
+        std::wstring m_backgroundPicture;
         Layer m_firstLayer, m_secondLayer, m_thirdLayer;
     };
 }

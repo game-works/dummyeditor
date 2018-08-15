@@ -23,9 +23,9 @@ Dummy::Map::~Map() {
 
 std::shared_ptr<Dummy::Map>
 Dummy::Map::loadFromFile(const Dummy::Project& project,
-                         const QString& filename) {
+                         const std::wstring& filename) {
 
-    QFile file(filename);
+    QFile file(QString::fromStdWString(filename));
 
     return loadFromFile(project, file);
 }
@@ -39,8 +39,8 @@ Dummy::Map::loadFromFile(const Dummy::Project& project, QFile& file) {
     return map;
 }
 
-void Dummy::Map::saveToFile(const QString& filename) const {
-    QFile file(filename);
+void Dummy::Map::saveToFile(const std::wstring& filename) const {
+    QFile file(QString::fromStdWString(filename));
 
     saveToFile(file);
 }

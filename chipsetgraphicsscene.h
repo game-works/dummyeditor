@@ -17,7 +17,7 @@ public:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent);
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* mouseEvent);
     ChipsetGraphicsScene& setChipset(const QPixmap& pixmap);
-    ChipsetGraphicsScene& setChipset(const QString& chipsetPath);
+    ChipsetGraphicsScene& setChipset(const std::wstring& chipsetPath);
     void _drawGrid();
 
     inline const QRect& selection() const {
